@@ -12,14 +12,17 @@ import {
   Mail,
   User,
   ShieldCheck,
+  LogOut,
 } from 'lucide-react';
 
 interface ProfileSettingsViewProps {
   onOpenAuthModal: () => void;
+  onLogout?: () => void;
 }
 
 export const ProfileSettingsView: React.FC<ProfileSettingsViewProps> = ({
   onOpenAuthModal,
+  onLogout,
 }) => {
   const { state, updateProfile, resetAllData } = useStudent();
   const [name, setName] = useState(state.profile.name);
@@ -78,12 +81,23 @@ export const ProfileSettingsView: React.FC<ProfileSettingsViewProps> = ({
           </p>
         </div>
 
-        <button
-          onClick={onOpenAuthModal}
-          className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-xs text-slate-300 font-medium transition"
-        >
-          <span>Switch Student Account</span>
-        </button>
+        <div className="flex items-center gap-2">
+          <button
+            onClick={onOpenAuthModal}
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-xs text-slate-300 font-medium transition"
+          >
+            <span>Account Details</span>
+          </button>
+          {onLogout && (
+            <button
+              onClick={onLogout}
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-rose-800/60 bg-rose-950/30 hover:bg-rose-900/50 text-xs text-rose-300 font-medium transition"
+            >
+              <LogOut className="w-3.5 h-3.5" />
+              <span>Log Out</span>
+            </button>
+          )}
+        </div>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">

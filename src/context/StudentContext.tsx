@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useEffect, useState } from 'react';
+import React, { createContext, useContext, useEffect, useState, useRef } from 'react';
 import {
   StudentState,
   StudentProfile,
@@ -9,107 +9,21 @@ import {
   StudyTarget,
   FlashcardItem,
 } from '../types';
-import { api } from '../services/api';
+import { useAuth } from './AuthContext';
+import { db, handleFirestoreError, OperationType } from '../services/firebase';
+import { doc, getDoc, setDoc, deleteDoc } from 'firebase/firestore';
+import {
+  getUserStorageKey,
+  createInitialStudentState,
+  sanitizeStudentPayload,
+  DEFAULT_STARTER_FLASHCARDS,
+} from '../utils/studentData';
 import { calculateLevel, updateStreak, evaluateUnlockedAchievements } from '../utils/gamification';
 import confetti from 'canvas-confetti';
 
-const INITIAL_PROFILE: StudentProfile = {
-  id: 'student_1',
-  name: 'Armaan Kunar',
-  email: 'armaankunar660@gmail.com',
-  college: 'B.Tech Computer Science & Engineering',
-  branch: 'CSE (Semester 1 / 2)',
-  semester: 'Semester 1',
-  examDate: new Date(Date.now() + 14 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
-  avatarSeed: 'c_master',
-};
-
-const DEFAULT_FLASHCARDS: FlashcardItem[] = [
-  {
-    id: 'fc_1',
-    topic: 'Pointers',
-    frontQuestion: 'What does the unary operator `*` do when applied to a pointer variable in C?',
-    backAnswer: 'Dereferencing operator: accesses the value stored at the memory address pointed to by the pointer (e.g., `*ptr = 20;`).',
-    difficulty: 'beginner',
-    known: false,
-    reviewCount: 0,
-  },
-  {
-    id: 'fc_2',
-    topic: 'Functions',
-    frontQuestion: 'Does C support pass-by-reference natively?',
-    backAnswer: 'No. Standard C strictly passes ALL arguments by value. To simulate reference semantics, C passes pointer values (memory addresses) by value.',
-    difficulty: 'intermediate',
-    known: false,
-    reviewCount: 0,
-  },
-  {
-    id: 'fc_3',
-    topic: 'Memory',
-    frontQuestion: 'What is the difference between malloc() and calloc() in stdlib.h?',
-    backAnswer: 'malloc(size) allocates uninitialized memory (contains garbage values); calloc(num, size) allocates memory and initializes all bytes to zero.',
-    difficulty: 'intermediate',
-    known: false,
-    reviewCount: 0,
-  },
-  {
-    id: 'fc_4',
-    topic: 'Structures',
-    frontQuestion: 'What is the arrow operator (->) used for in C?',
-    backAnswer: 'Member access through a pointer to a struct or union. `ptr->member` is shorthand for `(*ptr).member`.',
-    difficulty: 'beginner',
-    known: false,
-    reviewCount: 0,
-  },
-  {
-    id: 'fc_5',
-    topic: 'Arrays',
-    frontQuestion: 'Why does an array name decay into a pointer in most expressions?',
-    backAnswer: 'In C, an array identifier automatically evaluates to a pointer to its first element (&arr[0]), except with sizeof, &arr, or string literals.',
-    difficulty: 'advanced',
-    known: false,
-    reviewCount: 0,
-  },
-];
-
-const INITIAL_STATE: StudentState = {
-  profile: INITIAL_PROFILE,
-  xp: 0,
-  level: 1,
-  streakDays: 1,
-  lastActiveDate: new Date().toISOString().split('T')[0],
-  completedTopics: [],
-  savedPrograms: [],
-  savedExplanations: [],
-  quizHistory: [],
-  mistakeNotes: [],
-  studyTargets: [
-    {
-      id: 'target_1',
-      title: 'Revise Loop Control & Nested Patterns',
-      description: 'Practice for, while, and do-while loops with star patterns.',
-      topic: 'Control Flow',
-      dueDate: new Date(Date.now() + 2 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
-      priority: 'High',
-      status: 'Pending',
-    },
-    {
-      id: 'target_2',
-      title: 'Master Pointer Arithmetic and Dynamic Arrays',
-      description: 'Solve 3 malloc/free exercises and pointer offset logic.',
-      topic: 'Pointers and Memory',
-      dueDate: new Date(Date.now() + 5 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
-      priority: 'Medium',
-      status: 'Pending',
-    },
-  ],
-  flashcards: DEFAULT_FLASHCARDS,
-  completedChallenges: [],
-  achievements: [],
-};
-
 interface StudentContextType {
   state: StudentState;
+  isSyncing: boolean;
   addXP: (amount: number, reason?: string) => void;
   recordActivity: () => void;
   toggleTopicCompletion: (topicId: string) => void;
@@ -127,7 +41,6 @@ interface StudentContextType {
   addCustomFlashcard: (card: Omit<FlashcardItem, 'id' | 'known' | 'reviewCount'>) => void;
   completeChallenge: (challengeId: string) => void;
   updateProfile: (profile: Partial<StudentProfile>) => void;
-  switchUser: (email: string, name: string) => void;
   resetAllData: () => Promise<void>;
   recentUnlockedBadge: string | null;
   clearRecentBadge: () => void;
@@ -136,34 +49,188 @@ interface StudentContextType {
 const StudentContext = createContext<StudentContextType | null>(null);
 
 export const StudentProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [state, setState] = useState<StudentState>(() => {
-    try {
-      const cached = localStorage.getItem('c_tutor_student_state');
-      if (cached) return JSON.parse(cached);
-    } catch {}
-    return INITIAL_STATE;
-  });
-
+  const { currentUser, isGuest } = useAuth();
+  const [isSyncing, setIsSyncing] = useState(false);
   const [recentUnlockedBadge, setRecentUnlockedBadge] = useState<string | null>(null);
 
-  // Load from persistent server store on mount
-  useEffect(() => {
-    async function init() {
-      const serverData = await api.loadStudent(state.profile.id);
-      if (serverData && serverData.profile) {
-        setState(serverData);
-      }
-    }
-    init();
-  }, [state.profile.id]);
-
-  // Persist to server and localStorage on change
-  useEffect(() => {
+  // Initialize state based on current user or guest
+  const [state, setState] = useState<StudentState>(() => {
+    const key = getUserStorageKey(currentUser?.uid);
     try {
-      localStorage.setItem('c_tutor_student_state', JSON.stringify(state));
-      api.saveStudent(state.profile.id, state);
+      const cached = localStorage.getItem(key);
+      if (cached) return JSON.parse(cached);
     } catch {}
-  }, [state]);
+    return createInitialStudentState({
+      uid: currentUser?.uid || 'guest',
+      email: currentUser?.email || '',
+      name: currentUser?.displayName || (isGuest ? 'Guest Learner' : 'Student'),
+    });
+  });
+
+  const isInitialMount = useRef(true);
+
+  // Whenever currentUser or isGuest changes, switch the active student profile safely
+  useEffect(() => {
+    let isCancelled = false;
+
+    async function loadUserData() {
+      setIsSyncing(true);
+
+      if (currentUser) {
+        const storageKey = getUserStorageKey(currentUser.uid);
+        let localState: StudentState | null = null;
+
+        try {
+          const cached = localStorage.getItem(storageKey);
+          if (cached) localState = JSON.parse(cached);
+        } catch {}
+
+        // Fallback state before network resolves
+        if (localState) {
+          setState(localState);
+        } else {
+          setState(
+            createInitialStudentState({
+              uid: currentUser.uid,
+              email: currentUser.email || '',
+              name: currentUser.displayName || 'Student',
+            })
+          );
+        }
+
+        // Fetch authoritative remote document from Cloud Firestore
+        try {
+          const docPath = `users/${currentUser.uid}`;
+          const userDocRef = doc(db, 'users', currentUser.uid);
+          const snap = await getDoc(userDocRef);
+
+          if (isCancelled) return;
+
+          if (snap.exists()) {
+            const data = snap.data();
+            const remoteState: StudentState = {
+              profile: {
+                id: currentUser.uid,
+                name: data.name || currentUser.displayName || 'Student',
+                email: data.email || currentUser.email || '',
+                college: data.college || 'B.Tech Computer Science & Engineering',
+                branch: data.branch || 'CSE',
+                semester: data.semester || 'Semester 1',
+                examDate: data.examDate || '',
+                avatarSeed: data.avatarSeed || 'student',
+              },
+              xp: typeof data.xp === 'number' ? data.xp : 0,
+              level: typeof data.level === 'number' ? data.level : 1,
+              streakDays: typeof data.streakDays === 'number' ? data.streakDays : 1,
+              lastActiveDate: data.lastActiveDate || new Date().toISOString().split('T')[0],
+              completedTopics: Array.isArray(data.completedTopics) ? data.completedTopics : [],
+              completedChallenges: Array.isArray(data.completedChallenges) ? data.completedChallenges : [],
+              achievements: Array.isArray(data.achievements) ? data.achievements : [],
+              savedPrograms: Array.isArray(data.savedPrograms) ? data.savedPrograms : [],
+              savedExplanations: Array.isArray(data.savedExplanations) ? data.savedExplanations : [],
+              quizHistory: Array.isArray(data.quizHistory) ? data.quizHistory : [],
+              mistakeNotes: Array.isArray(data.mistakeNotes) ? data.mistakeNotes : [],
+              studyTargets: Array.isArray(data.studyTargets) ? data.studyTargets : [],
+              flashcards: Array.isArray(data.flashcards) && data.flashcards.length > 0 ? data.flashcards : DEFAULT_STARTER_FLASHCARDS,
+            };
+
+            setState(remoteState);
+            localStorage.setItem(storageKey, JSON.stringify(remoteState));
+          } else {
+            // First time this user logs in: initialize their Firestore document
+            let meta: any = {};
+            try {
+              const metaStr = sessionStorage.getItem(`c_tutor_signup_meta_${currentUser.uid}`);
+              if (metaStr) {
+                meta = JSON.parse(metaStr);
+                sessionStorage.removeItem(`c_tutor_signup_meta_${currentUser.uid}`);
+              }
+            } catch {}
+
+            const freshState = createInitialStudentState({
+              uid: currentUser.uid,
+              email: currentUser.email || '',
+              name: currentUser.displayName || meta.name || 'Student',
+              college: meta.college,
+              branch: meta.branch,
+              semester: meta.semester,
+              examDate: meta.examDate,
+            });
+
+            setState(freshState);
+            localStorage.setItem(storageKey, JSON.stringify(freshState));
+
+            try {
+              const payload = sanitizeStudentPayload(freshState, currentUser.uid);
+              await setDoc(userDocRef, payload);
+            } catch (firestoreErr) {
+              handleFirestoreError(firestoreErr, OperationType.CREATE, docPath);
+            }
+          }
+        } catch (err: any) {
+          console.warn('[Sync] Firestore load error (falling back to local cache):', err?.message || err);
+        }
+      } else if (isGuest) {
+        // Guest mode: isolated guest storage key
+        const guestKey = 'c_tutor_guest_state';
+        try {
+          const cached = localStorage.getItem(guestKey);
+          if (cached) {
+            setState(JSON.parse(cached));
+          } else {
+            const guestState = createInitialStudentState({
+              uid: 'guest',
+              email: 'guest@student.edu',
+              name: 'Guest Learner',
+              college: 'Demo Engineering Campus',
+            });
+            setState(guestState);
+            localStorage.setItem(guestKey, JSON.stringify(guestState));
+          }
+        } catch {}
+      } else {
+        // Unauthenticated & not guest: fresh empty template
+        setState(
+          createInitialStudentState({
+            uid: 'unauthenticated',
+            email: '',
+            name: 'Learner',
+          })
+        );
+      }
+
+      setIsSyncing(false);
+    }
+
+    loadUserData();
+
+    return () => {
+      isCancelled = true;
+    };
+  }, [currentUser?.uid, isGuest]);
+
+  // Persist local state and remote Cloud Firestore
+  useEffect(() => {
+    if (isInitialMount.current) {
+      isInitialMount.current = false;
+      return;
+    }
+
+    const uid = currentUser?.uid;
+    const storageKey = getUserStorageKey(uid);
+
+    try {
+      localStorage.setItem(storageKey, JSON.stringify(state));
+    } catch {}
+
+    if (uid && currentUser) {
+      const docPath = `users/${uid}`;
+      const payload = sanitizeStudentPayload(state, uid);
+      setDoc(doc(db, 'users', uid), payload, { merge: true }).catch((err) => {
+        console.warn('[Firestore] Sync warning:', err?.message || err);
+      });
+    }
+  }, [state, currentUser]);
 
   const clearRecentBadge = () => setRecentUnlockedBadge(null);
 
@@ -185,7 +252,6 @@ export const StudentProvider: React.FC<{ children: React.ReactNode }> = ({ child
       const newXp = prev.xp + amount;
       const { level } = calculateLevel(newXp);
 
-      // Check achievements
       const { newlyUnlocked, allUnlockedIds } = evaluateUnlockedAchievements({
         ...prev,
         xp: newXp,
@@ -401,34 +467,39 @@ export const StudentProvider: React.FC<{ children: React.ReactNode }> = ({ child
     }));
   };
 
-  const switchUser = (email: string, name: string) => {
-    const userId = `student_${email.replace(/[^a-zA-Z0-9]/g, '_')}`;
-    const newProfile: StudentProfile = {
-      id: userId,
-      name,
-      email,
-      college: 'B.Tech Computer Science & Engineering',
-      branch: 'CSE',
-      semester: 'Semester 1',
-      examDate: new Date(Date.now() + 14 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
-      avatarSeed: name.toLowerCase().replace(/\s+/g, '_'),
-    };
-    setState({
-      ...INITIAL_STATE,
-      profile: newProfile,
-    });
-  };
-
   const resetAllData = async () => {
-    await api.resetStudent(state.profile.id);
-    localStorage.removeItem('c_tutor_student_state');
-    setState(INITIAL_STATE);
+    if (currentUser) {
+      const docPath = `users/${currentUser.uid}`;
+      try {
+        await deleteDoc(doc(db, 'users', currentUser.uid));
+      } catch (err) {
+        handleFirestoreError(err, OperationType.DELETE, docPath);
+      }
+      localStorage.removeItem(getUserStorageKey(currentUser.uid));
+      setState(
+        createInitialStudentState({
+          uid: currentUser.uid,
+          email: currentUser.email || '',
+          name: currentUser.displayName || 'Student',
+        })
+      );
+    } else {
+      localStorage.removeItem('c_tutor_guest_state');
+      setState(
+        createInitialStudentState({
+          uid: 'guest',
+          email: '',
+          name: 'Guest Learner',
+        })
+      );
+    }
   };
 
   return (
     <StudentContext.Provider
       value={{
         state,
+        isSyncing,
         addXP,
         recordActivity,
         toggleTopicCompletion,
@@ -446,7 +517,6 @@ export const StudentProvider: React.FC<{ children: React.ReactNode }> = ({ child
         addCustomFlashcard,
         completeChallenge,
         updateProfile,
-        switchUser,
         resetAllData,
         recentUnlockedBadge,
         clearRecentBadge,

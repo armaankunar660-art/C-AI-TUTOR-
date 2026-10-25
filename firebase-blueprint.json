@@ -1,0 +1,107 @@
+{
+  "entities": {
+    "UserProfile": {
+      "title": "UserProfile",
+      "description": "Authenticated student user record containing learning metrics, progress, and saved work",
+      "type": "object",
+      "properties": {
+        "userId": {
+          "type": "string",
+          "description": "Firebase Auth UID of the student"
+        },
+        "email": {
+          "type": "string",
+          "format": "email",
+          "description": "Student email address"
+        },
+        "name": {
+          "type": "string",
+          "description": "Student display name"
+        },
+        "college": {
+          "type": "string",
+          "description": "College or university name"
+        },
+        "branch": {
+          "type": "string",
+          "description": "Academic engineering branch"
+        },
+        "semester": {
+          "type": "string",
+          "description": "Current college semester"
+        },
+        "examDate": {
+          "type": "string",
+          "description": "Upcoming target C exam date in YYYY-MM-DD"
+        },
+        "avatarSeed": {
+          "type": "string",
+          "description": "Avatar customization seed string"
+        },
+        "xp": {
+          "type": "integer",
+          "description": "Total earned experience points"
+        },
+        "level": {
+          "type": "integer",
+          "description": "Calculated student level"
+        },
+        "streakDays": {
+          "type": "integer",
+          "description": "Consecutive days of learning streak"
+        },
+        "lastActiveDate": {
+          "type": "string",
+          "description": "Last active learning date in YYYY-MM-DD"
+        },
+        "completedTopics": {
+          "type": "array",
+          "description": "List of completed curriculum topic IDs"
+        },
+        "completedChallenges": {
+          "type": "array",
+          "description": "List of completed daily challenge IDs"
+        },
+        "achievements": {
+          "type": "array",
+          "description": "List of unlocked achievement badge IDs"
+        },
+        "savedPrograms": {
+          "type": "array",
+          "description": "Saved C programs with code snippets"
+        },
+        "savedExplanations": {
+          "type": "array",
+          "description": "Saved code architecture explanations"
+        },
+        "quizHistory": {
+          "type": "array",
+          "description": "Logged quiz attempts and scores"
+        },
+        "mistakeNotes": {
+          "type": "array",
+          "description": "Mistake notebook entries for personalized debugging review"
+        },
+        "studyTargets": {
+          "type": "array",
+          "description": "Scheduled revision goals and exam targets"
+        },
+        "flashcards": {
+          "type": "array",
+          "description": "Personalized active recall flashcards"
+        },
+        "updatedAt": {
+          "type": "string",
+          "description": "ISO timestamp of last update"
+        }
+      },
+      "required": ["userId", "email", "name"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": "UserProfile",
+      "description": "Private student learning document indexed by Firebase Auth UID"
+    }
+  }
+}

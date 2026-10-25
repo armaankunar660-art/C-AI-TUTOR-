@@ -1,0 +1,9 @@
+{
+	"appId": "com.ctutorai.app",
+	"appName": "C Tutor AI",
+	"webDir": "dist",
+	"server": {
+		"androidScheme": "https",
+		"cleartext": true
+	}
+}

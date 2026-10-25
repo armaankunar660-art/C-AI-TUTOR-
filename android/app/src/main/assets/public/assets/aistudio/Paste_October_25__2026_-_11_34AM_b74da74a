@@ -1,0 +1,1122 @@
+# 🚀 PROJECT: C TUTOR AI — YOUR PERSONAL AI PROGRAMMING MENTOR
+
+## 1. PROJECT VISION
+
+Build a complete, modern, AI-powered C programming learning platform called:
+
+**C TUTOR AI**
+*Learn C. Write Code. Fix Bugs. Ace Exams.*
+
+The application is designed primarily for B.Tech Computer Engineering students, college beginners, and anyone learning the C programming language.
+
+It must combine the capabilities of:
+- An intelligent AI programming tutor.
+- A C code generator and debugger.
+- An interactive coding playground.
+- A college exam preparation assistant.
+- An AI-powered quiz and practice platform.
+- A personalized study planner.
+- A student progress and achievement dashboard.
+
+The goal is to create a polished, production-minded web application that students genuinely want to use every day.
+
+**Do not create just a landing page, static UI mockup, or chatbot demo. Build the actual application, including functional interactions, real AI integration, persistent storage, authentication, and the necessary backend integrations wherever supported.**
+
+Start by examining the available development environment and choosing a compatible architecture. Then implement the application in manageable stages, testing each major feature before moving to the next.
+
+Do not stop after presenting a plan.
+
+---
+
+# 2. PREMIUM USER INTERFACE AND DESIGN SYSTEM
+
+Create a visually impressive interface that feels like a premium AI coding product made for modern B.Tech students.
+
+## Visual identity
+
+Use the following design direction:
+
+- Default theme: Midnight Dark.
+- Background: Deep navy and charcoal.
+- Primary accent: Electric purple.
+- Secondary accent: Cyan and blue.
+- Typography: Space Grotesk for headings and Inter for body text, or similar modern fonts.
+- Cards: Rounded corners, subtle borders, and carefully controlled shadows.
+- Buttons: Modern gradients used selectively.
+- Code panels: Dark editor-style surfaces with syntax highlighting.
+- Icons: Consistent, clean icons from a suitable icon library.
+- Animations: Subtle hover effects, smooth transitions, and polished loading states.
+
+The design should feel futuristic, intelligent, premium, and professional without becoming cluttered.
+
+Avoid excessive glowing effects, unnecessary animations, tiny text, and childish graphics.
+
+## Responsive design
+
+The application must work on:
+- Desktop computers.
+- Laptops.
+- Tablets.
+- Mobile phones.
+
+Use a collapsible sidebar on desktop and suitable navigation on smaller screens.
+
+Provide a light/dark theme toggle if practical.
+
+Ensure accessibility, readable contrast, keyboard navigation, and clear focus indicators.
+
+## Main navigation
+
+Create these navigation items:
+
+1. Dashboard
+2. AI Tutor
+3. Learn C
+4. Generate Code
+5. Code Playground
+6. Explain Code
+7. Debug Code
+8. Exam Preparation
+9. Practice Quizzes
+10. Daily Challenges
+11. Screenshot Solver
+12. Flashcards
+13. My Progress
+14. Study Planner
+15. Mistake Notebook
+16. Saved Items
+17. Profile and Settings
+18. Logout
+
+Group related items logically so the navigation remains clean.
+
+Do not leave navigation links pointing to empty or nonfunctional pages.
+
+## Dashboard design
+
+Create an attractive personalized dashboard with:
+
+**Welcome section**
+- Personalized greeting using the student's name.
+- A short motivational message.
+- A prominent AI tutor input box.
+- Difficulty selector.
+- Quick access to recent activity.
+
+**Progress cards**
+- Topics completed.
+- Quiz average.
+- Study targets completed.
+- Coding challenges completed.
+- Current learning streak, if implemented.
+
+**Learning sections**
+- Continue Learning.
+- Your Coding Journey.
+- Today's Coding Challenge.
+- Upcoming Study Targets.
+- Recent AI Conversations.
+- Your Weak Topics.
+- Recommended Next Lesson.
+- Saved Programs.
+
+**Visual elements**
+- Learning progress chart.
+- Topic-wise performance chart.
+- Upcoming deadlines.
+- Recent achievements.
+
+All statistics must come from actual stored data. Show sensible empty states for new students instead of fake scores or achievements.
+
+---
+
+# 3. AI TUTOR — THE CORE FEATURE
+
+Build an intelligent C programming tutor powered by a real AI model.
+
+Use the supported Gemini integration available in the environment. Select a fast, suitable model supported by the actual API and project configuration.
+
+Do not simulate AI responses with hardcoded examples.
+
+## Difficulty levels
+
+Provide four difficulty settings.
+
+### Auto Level — Default
+Automatically estimate the student's level and the complexity of the question. Adapt the response accordingly.
+
+### Beginner
+- Explain concepts from scratch.
+- Use simple English.
+- Introduce technical terms gradually.
+- Give small, easy examples.
+- Explain code line by line when useful.
+
+### Intermediate
+- Explain programming concepts in more detail.
+- Cover functions, arrays, strings, pointers, algorithms, and problem-solving.
+- Provide practical examples.
+- Discuss common mistakes and edge cases.
+
+### Advanced
+- Cover advanced pointers and function pointers.
+- Discuss memory management.
+- Explain bitwise operations.
+- Cover complex C behavior and undefined behavior.
+- Discuss performance, data structures, and algorithmic complexity.
+
+Allow students to change difficulty at any time.
+
+## C programming coverage
+
+The tutor must answer a broad range of C questions, not just a predefined list.
+
+Cover:
+
+### Fundamentals
+- Introduction to C.
+- Structure of a C program.
+- Compilation and execution.
+- Variables and constants.
+- Data types.
+- Keywords and identifiers.
+- Input and output.
+- Operators.
+- Expressions.
+- Type conversion.
+- Scope and lifetime.
+
+### Control flow
+- if and if-else.
+- Nested conditions.
+- switch statements.
+- for loops.
+- while loops.
+- do-while loops.
+- break and continue.
+- Nested loops.
+- Pattern printing.
+
+### Functions
+- Function declarations and definitions.
+- Parameters and return values.
+- Call by value.
+- Recursion.
+- Function prototypes.
+- Storage classes.
+- Variadic functions.
+- Macros and preprocessor directives.
+
+Clarify that C passes arguments by value, including pointer values, rather than claiming that standard C has true call-by-reference semantics.
+
+### Arrays and strings
+- One-dimensional arrays.
+- Multidimensional arrays.
+- Character arrays.
+- String handling.
+- String library functions.
+- Array searching.
+- Sorting algorithms.
+- Matrix operations.
+- Pointers and arrays.
+
+### Pointers and memory
+- Pointer fundamentals.
+- Pointer arithmetic.
+- Double pointers.
+- Arrays of pointers.
+- Function pointers.
+- Dynamic memory allocation.
+- malloc, calloc, realloc, and free.
+- Memory leaks.
+- Dangling pointers.
+- Null pointers.
+- Undefined behavior.
+
+### Structures and advanced C
+- Structures.
+- Unions.
+- Enumerations.
+- typedef.
+- File handling.
+- Header files.
+- Preprocessor directives.
+- Bitwise operators.
+- Command-line arguments.
+- Data structures.
+- Time and space complexity.
+- Compiler warnings.
+- Portability and undefined behavior.
+
+### Common college programs
+- Prime numbers.
+- Armstrong numbers.
+- Perfect numbers.
+- Palindromes.
+- Fibonacci series.
+- Factorial.
+- Bubble sort.
+- Linear search.
+- Binary search.
+- Matrix addition.
+- Matrix transpose.
+- Symmetric matrices.
+- Identity matrices.
+- Row sums.
+- Character-array copying and appending.
+- Star patterns.
+- Number patterns.
+
+The tutor must also handle questions outside these examples.
+
+## AI answer format
+
+Adapt the answer to the student's request.
+
+For educational questions, use relevant sections such as:
+
+1. Simple explanation.
+2. Important concept.
+3. Syntax.
+4. Example.
+5. Complete C program.
+6. Step-by-step explanation.
+7. Sample input and output.
+8. Common mistakes.
+9. Short revision summary.
+
+Do not force all nine sections into every response.
+
+For code questions, generate complete, compilable C programs whenever possible.
+
+Use appropriate headers and valid C syntax. Explain important assumptions and edge cases.
+
+Do not invent compiler output or claim that code has been executed unless it actually has.
+
+---
+
+# 4. THREE AI LEARNING MODES
+
+Add a feature called **Choose Your Learning Style**.
+
+### Learn Mode
+Teach the concept step by step before presenting a solution.
+
+### Practice Mode
+Encourage students to solve the problem themselves. Offer hints and progressively stronger guidance. Do not reveal the complete solution immediately unless requested.
+
+### Solve Mode
+Provide the complete solution, code, explanation, and sample output when appropriate.
+
+Let students switch modes easily.
+
+Example: If a student asks how to write a prime-number program:
+
+- Learn Mode explains prime numbers and the algorithm.
+- Practice Mode provides hints and asks the student to attempt the solution.
+- Solve Mode provides a complete C program and explains it.
+
+The modes must use real AI responses and genuinely different instructional behavior.
+
+---
+
+# 5. AI CODE GENERATOR
+
+Create a dedicated code-generation page.
+
+## Interface
+- Large problem-description input.
+- Difficulty selector.
+- Learning-mode selector.
+- Optional expected input/output fields.
+- Generate Code button.
+- Output code panel with syntax highlighting.
+- Copy Code button.
+- Explain Code button.
+- Debug Code button.
+- Save Code button.
+- Regenerate button.
+
+## Requirements
+- Generate code from the student's actual request.
+- Produce standard C code whenever possible.
+- Include necessary headers.
+- Handle input and output correctly.
+- Explain the algorithm.
+- Include sample input and output when useful.
+- Mention important edge cases.
+- Avoid unnecessary complexity at beginner level.
+
+Display clear error messages if the AI request fails.
+
+Never pretend that generated code has been compiled or executed if it has not.
+
+---
+
+# 6. INTERACTIVE C CODE PLAYGROUND
+
+Build an interactive coding environment where students can write and test C programs.
+
+## Features
+- Editable C code editor.
+- Syntax highlighting.
+- Line numbers.
+- Run Code button.
+- Custom standard input.
+- Output console.
+- Compilation-error display.
+- Clear Console button.
+- Reset Code button.
+- Save Program button.
+- Copy Code button.
+- Explain Code button.
+- Debug Code button.
+
+Provide a few starter templates, such as:
+- Hello World.
+- Calculator.
+- Prime-number checker.
+- Factorial.
+- Array sorting.
+
+## Actual code execution
+
+Integrate a real C compiler or a supported sandboxed code-execution service.
+
+Do not use the AI model as a substitute for a compiler.
+
+If an external execution service is required, clearly identify the necessary configuration and implement the supported integration.
+
+Security requirements:
+- Execute untrusted code only in a suitable sandbox.
+- Apply execution timeouts and resource limits.
+- Prevent access to secrets and private application data.
+- Do not execute arbitrary student code directly on a privileged server.
+- Handle infinite loops and resource exhaustion safely.
+
+If secure execution cannot be configured in the current environment, implement the editor and AI assistance honestly, clearly label code execution as unavailable, and explain the remaining setup. Do not display fake compiler results.
+
+---
+
+# 7. AI CODE EXPLAINER
+
+Create a dedicated code-explanation tool.
+
+Allow students to paste or open saved C code.
+
+Features:
+- Explain the program's purpose.
+- Explain variables and data types.
+- Explain conditions and loops.
+- Explain functions.
+- Explain pointers and memory behavior.
+- Provide line-by-line explanations.
+- Explain the algorithm.
+- Show expected output when it can be reliably determined.
+- Identify possible edge cases.
+- Save the explanation.
+- Copy the explanation.
+
+Include a toggle for a beginner-friendly explanation.
+
+The tool should adapt to short snippets and larger programs.
+
+---
+
+# 8. AI DEBUGGING ASSISTANT
+
+Create a professional debugging interface.
+
+## Inputs
+- C code editor.
+- Error-message field.
+- Optional expected-behavior description.
+- Difficulty selector.
+
+## Output
+- Likely error.
+- Explanation of why it occurs.
+- Corrected code.
+- Summary of changes.
+- Potential logical errors.
+- Suggestions for testing.
+
+Distinguish between:
+- Syntax errors.
+- Compilation errors.
+- Runtime errors.
+- Logical errors.
+- Memory-related errors.
+- Undefined behavior.
+
+Allow students to copy and save the corrected code.
+
+Do not assume the error without examining the supplied code and context. When the cause is uncertain, explain the uncertainty.
+
+---
+
+# 9. B.TECH EXAM PREPARATION MODE
+
+Create a dedicated **Exam Preparation** section for college students.
+
+## Answer formats
+
+Allow students to select:
+- 2-mark answer.
+- 5-mark answer.
+- 10-mark answer.
+- Quick revision.
+- Detailed explanation.
+
+Adapt the answer length and depth to the chosen format.
+
+For example, a 2-mark question should receive a concise definition and a small example if appropriate. A 10-mark question should receive a more complete explanation with suitable code, steps, and examples.
+
+## Exam features
+- Important topic summaries.
+- Definitions and syntax.
+- Topic-wise MCQs.
+- Predict-the-output questions.
+- Find-the-error questions.
+- Programming questions.
+- Timed mock tests.
+- Revision checklists.
+- Last-minute revision notes.
+- Personal exam countdowns.
+- Custom revision schedules.
+
+Allow students to enter their exam date and select topics they need to revise.
+
+The AI can create a suggested revision plan based on the available time.
+
+Clearly distinguish generated practice material from officially provided college examination papers.
+
+Do not claim that questions will appear in an actual examination.
+
+---
+
+# 10. AI QUIZ GENERATOR
+
+Create an interactive quiz system.
+
+## Configuration
+Let students choose:
+- Topic.
+- Difficulty.
+- Number of questions.
+- Question type.
+- Optional time limit.
+
+## Question types
+- Multiple choice.
+- Predict the output.
+- Find the error.
+- Fill in the blank.
+- Arrange code.
+- Short conceptual questions.
+- Basic programming challenges.
+
+## Quiz experience
+- Display one question at a time.
+- Provide four options for MCQs.
+- Allow answer selection.
+- Support next and previous navigation where appropriate.
+- Track unanswered questions.
+- Include a submission confirmation for timed or longer tests.
+- Calculate the score accurately.
+- Reveal correct answers and explanations at the appropriate time.
+- Show a final score and performance summary.
+- Offer a retry option.
+
+Save actual quiz attempts, scores, dates, and topic performance to the student's account.
+
+Avoid duplicate questions within a quiz when practical.
+
+Validate AI-generated questions and answer structures before displaying them. If a generated quiz is malformed, handle the problem gracefully.
+
+---
+
+# 11. PREDICT-THE-OUTPUT CHALLENGES
+
+Create a dedicated interactive practice mode.
+
+Display a C program and ask:
+
+**"What will this program print?"**
+
+Students submit their predicted output before seeing the answer.
+
+Then display:
+- Correct output.
+- Whether their answer matches.
+- A step-by-step execution explanation.
+- The concept being tested.
+- An optional follow-up question.
+
+Include examples involving:
+- Operators.
+- Loops.
+- Nested loops.
+- Arrays.
+- Strings.
+- Functions.
+- Recursion.
+- Pointers.
+- Type conversions.
+
+Use actual compiler execution where available to validate outputs. If no execution is available, only present outputs that can be reliably determined, and do not falsely claim compiler verification.
+
+Track performance over time.
+
+---
+
+# 12. AI SCREENSHOT AND QUESTION SOLVER
+
+Create an image-upload feature that lets students submit:
+- Screenshots of programming questions.
+- Images of C code.
+- Compiler-error screenshots.
+- Lecture-slide images.
+- Suitable photographs of notes.
+
+Use a supported multimodal AI model to inspect the image.
+
+## Workflow
+1. Upload or select an image.
+2. Preview the image.
+3. Ask a question about it, or choose an action.
+4. Process the image with the actual AI integration.
+5. Display the result.
+6. Allow the student to ask follow-up questions.
+7. Allow useful answers to be saved.
+
+Actions may include:
+- Explain This Question.
+- Solve This C Program.
+- Debug This Code.
+- Generate Exam Notes.
+- Create MCQs from This Content.
+
+Handle unclear or unreadable images by asking for a clearer upload instead of inventing missing text.
+
+Validate file type and size. Handle upload errors safely.
+
+---
+
+# 13. AI FLASHCARDS
+
+Build a flashcard-based revision system.
+
+Allow students to generate flashcards from:
+- A selected C topic.
+- An AI explanation.
+- Saved notes.
+- A pasted piece of learning material.
+
+Each card should have:
+- A question or concept on the front.
+- An answer or explanation on the back.
+- A topic label.
+- A difficulty label where appropriate.
+
+Include:
+- Flip Card interaction.
+- Next and Previous controls.
+- Mark as Known.
+- Mark as Needs Revision.
+- Save Flashcard.
+- Review Saved Cards.
+
+Track review history and identify cards that need additional revision.
+
+If practical, implement a simple spaced-repetition schedule. Keep the scheduling logic transparent and do not imply that a sophisticated learning model is being used unless one exists.
+
+---
+
+# 14. STUDENT ACCOUNTS AND AUTHENTICATION
+
+Implement real student authentication.
+
+Include:
+- Registration.
+- Login.
+- Logout.
+- Forgot-password flow.
+- Student profile.
+- Profile editing.
+- Appropriate form validation.
+- Authentication error messages.
+- Protected private pages.
+
+Use Firebase Authentication if compatible with the available environment. If an authentication system is already configured and suitable, use it instead.
+
+Do not implement fake login screens.
+
+Do not store plaintext passwords.
+
+Keep API keys and other secrets out of public frontend code. Use supported secure configuration or server-side integration where appropriate.
+
+If authentication requires external setup, implement the available integration and provide clear instructions for the remaining configuration.
+
+Students must be able to access their own learning history after logging in again.
+
+---
+
+# 15. PERSISTENT LEARNING PROGRESS
+
+Create a personalized learning-progress system.
+
+Track:
+- Topics studied.
+- Topics completed.
+- Saved programs.
+- Saved explanations.
+- Debugging examples.
+- Quiz attempts.
+- Quiz scores.
+- Flashcards.
+- Study targets.
+- Learning activity.
+- Challenge results.
+- Achievements, if implemented.
+
+Allow students to:
+- Mark topics as completed.
+- Resume previous learning.
+- Revisit saved content.
+- Review previous quiz results.
+- Delete saved items.
+- See progress over time.
+
+Use a persistent database such as Cloud Firestore when supported and configured.
+
+Associate private records with the authenticated student's unique ID.
+
+Implement appropriate database security rules so users cannot read or change another student's private information.
+
+Data must survive page refreshes, logout, and login.
+
+Do not rely solely on temporary frontend state or local storage for data that must synchronize across sessions and devices.
+
+---
+
+# 16. STUDY PLANNER AND CALENDAR
+
+Create a modern study planner designed for college schedules.
+
+## Calendar
+- Monthly view.
+- Previous and next month navigation.
+- Highlight the current date.
+- Display study targets on their dates.
+- Select a date to view scheduled tasks.
+- Responsive layout.
+- Upcoming-target list.
+
+## Study target fields
+Each target should support:
+- Title.
+- Description.
+- Related topic.
+- Due date.
+- Priority: Low, Medium, or High.
+- Status: Pending or Completed.
+
+Allow students to:
+- Create targets.
+- Edit targets.
+- Delete targets.
+- Mark targets complete.
+- Filter pending and completed targets.
+- Identify overdue targets.
+- View upcoming deadlines.
+
+Persist targets to the student's account.
+
+Use dates and time zones consistently so tasks do not move to the wrong day.
+
+## AI study planning
+
+Allow students to request a study plan using information such as:
+
+"My C exam is in five days. I need to revise arrays, loops, functions, and pointers. I can study for two hours each day."
+
+The AI should generate a realistic schedule based on the student's available time and topics.
+
+The student must be able to review, edit, and approve the plan before adding its tasks to the calendar.
+
+Do not automatically create duplicate tasks every time a plan is regenerated.
+
+---
+
+# 17. DAILY CODING CHALLENGES
+
+Create a Daily Challenge page.
+
+Include:
+- A programming problem.
+- Difficulty level.
+- Topic label.
+- Problem description.
+- Input and output format.
+- Constraints where appropriate.
+- Example input and output.
+- Hints.
+- Solution explanation after submission or reveal.
+
+Use actual code execution for automatic code testing when the secure playground is available.
+
+If code execution is unavailable, support answer submission and AI-assisted review, but label the review appropriately and do not claim it is equivalent to compiler-based judging.
+
+Track completed challenges and performance.
+
+Allow students to revisit previous challenges.
+
+---
+
+# 18. MISTAKE NOTEBOOK
+
+Build a personal notebook for learning from errors.
+
+Allow students to save:
+- Original code.
+- Error messages.
+- Corrected code.
+- Explanation of the mistake.
+- Related topic.
+- Date saved.
+- Personal notes.
+
+Students should be able to edit, search, filter, and delete notebook entries.
+
+Provide an option to save a debugging result directly to the notebook.
+
+Include a revision view so students can review previous mistakes before exams.
+
+Persist notebook entries to the student's account.
+
+---
+
+# 19. GAMIFICATION AND ACHIEVEMENTS
+
+Add a simple, genuine reward system.
+
+Possible features:
+- XP points.
+- Daily learning goals.
+- Weekly learning summary.
+- Achievement badges.
+- Study streaks.
+- Topic milestones.
+- Progress indicators.
+
+Example achievements:
+- First Steps: Complete the first lesson.
+- Loop Master: Pass a loops quiz.
+- Bug Hunter: Complete five debugging exercises.
+- Array Ace: Pass an arrays assessment.
+- Quiz Champion: Reach a defined score in a quiz.
+- C Champion: Complete a learning roadmap.
+
+Define achievement conditions explicitly.
+
+Award achievements only when the student completes the actual required activities.
+
+Calculate streaks from recorded activity and handle missed days correctly.
+
+Do not fabricate points, progress, activity, or achievements.
+
+Keep gamification encouraging rather than distracting.
+
+---
+
+# 20. PERSONALIZED LEARNING ROADMAP
+
+Create a guided C programming roadmap.
+
+Suggested sequence:
+
+1. Introduction to C.
+2. Variables and Data Types.
+3. Input and Output.
+4. Operators.
+5. Conditional Statements.
+6. Loops.
+7. Functions.
+8. Arrays.
+9. Strings.
+10. Pointers.
+11. Structures and Unions.
+12. Dynamic Memory Allocation.
+13. File Handling.
+14. Searching and Sorting.
+15. Basic Data Structures.
+16. Advanced C Concepts.
+
+Each topic should have:
+- A short introduction.
+- Learning objectives.
+- An explanation.
+- Examples.
+- Practice questions.
+- An optional quiz.
+- A completion indicator.
+
+Let students explore topics freely rather than rigidly locking every lesson behind prerequisites.
+
+Recommend the next topic using actual completion data and quiz performance.
+
+Clearly distinguish generated learning recommendations from formal academic requirements.
+
+---
+
+# 21. PERSONAL LEARNING ANALYTICS
+
+Create a My Progress page.
+
+Display:
+- Topics completed.
+- Quiz accuracy.
+- Quiz performance over time.
+- Study target completion.
+- Challenge completion.
+- Weak topics based on actual performance.
+- Recent learning activity.
+- Saved resources.
+- Learning milestones.
+
+Include simple, readable charts.
+
+Calculate statistics from stored data rather than hardcoded sample values.
+
+For a new account, display an encouraging onboarding state and explain how progress tracking works.
+
+Do not label a student as weak in a topic based on one question. Use a reasonable minimum amount of evidence, and explain how recommendations are derived.
+
+---
+
+# 22. SPEED, RELIABILITY, AND ERROR HANDLING
+
+The app must feel fast and responsive.
+
+- Use a supported fast AI model.
+- Use streaming when supported by the integration.
+- Avoid duplicate API requests.
+- Prevent accidental repeated submissions.
+- Display useful loading indicators.
+- Preserve user input if a request fails.
+- Handle network failures.
+- Handle rate limits.
+- Handle malformed AI responses.
+- Validate AI-generated quiz data.
+- Avoid unnecessary database reads.
+- Cache only where safe and useful.
+- Keep AI answers concise when appropriate.
+- Avoid blocking the entire interface while one component loads.
+- Provide clear recovery actions when an error occurs.
+
+Do not switch to unsupported APIs or remove useful functionality simply to improve speed.
+
+---
+
+# 23. DATA STRUCTURE AND SECURITY
+
+Choose a maintainable architecture appropriate for the environment.
+
+Possible collections or equivalent data structures include:
+- users
+- learning_progress
+- saved_items
+- quiz_attempts
+- study_targets
+- flashcards
+- mistake_notebook
+- challenge_attempts
+- achievements
+- learning_activity
+
+Use the database structure that best fits the implemented architecture.
+
+Requirements:
+- Authenticate private requests.
+- Enforce per-user data isolation.
+- Validate data on the server where appropriate.
+- Protect API credentials.
+- Avoid exposing private records.
+- Handle failed writes and reads.
+- Prevent unauthorized deletion or modification.
+- Provide sensible data-deletion controls.
+- Avoid logging passwords, tokens, or sensitive data.
+
+Never claim that the database is secured if the required security rules have not been configured and verified.
+
+---
+
+# 24. RESPONSIBLE AI AND EDUCATIONAL QUALITY
+
+The platform should encourage learning rather than blind copying.
+
+- Explain generated code.
+- Encourage students to test programs.
+- Clearly label AI-generated content.
+- Acknowledge uncertainty.
+- Avoid claiming code is guaranteed to work.
+- Do not fabricate compiler results.
+- Do not fabricate quiz scores or student progress.
+- Respect user-provided learning materials.
+- Handle ambiguous questions by asking clarifying questions when necessary.
+- Prefer standard, portable C where appropriate.
+- Explain when a question concerns C++ rather than standard C.
+- Do not expose one student's private information to another student.
+
+Provide helpful feedback without being condescending.
+
+---
+
+# 25. IMPLEMENTATION PLAN
+
+Build the application in stages while keeping the project functional.
+
+## Stage 1 — Core application
+- Premium interface.
+- Responsive navigation.
+- Dashboard.
+- Real AI tutor.
+- Four difficulty levels.
+- Learn, Practice, and Solve modes.
+- Code generation.
+- Code explanation.
+- Code debugging.
+
+## Stage 2 — Student accounts and persistence
+- Registration and login.
+- Profile.
+- Persistent saved items.
+- Learning progress.
+- Database integration and security rules.
+
+## Stage 3 — Learning and exam tools
+- Exam Preparation Mode.
+- MCQ quiz generator.
+- Quiz history.
+- Predict-the-output challenges.
+- Learning roadmap.
+- Flashcards.
+- Mistake Notebook.
+
+## Stage 4 — Study planning and engagement
+- Study calendar.
+- Persistent study targets.
+- AI-generated study plans.
+- Learning analytics.
+- Daily challenges.
+- Achievements and streaks.
+
+## Stage 5 — Advanced integrations
+- Interactive C code playground with real compiler execution.
+- Screenshot solver.
+- Additional multimodal features where supported.
+
+You may adjust the order when the environment requires it, but do not sacrifice the reliability of the core tutor.
+
+Complete each stage as thoroughly as practical before proceeding.
+
+If a stage depends on external configuration, explain what is missing and continue implementing independent features.
+
+---
+
+# 26. REQUIRED TESTING
+
+Test the real application, not just the visual design.
+
+## AI tutor
+1. Ask: "What is a variable in C?"
+2. Ask: "Write a C program to check whether a number is prime."
+3. Ask: "Explain bubble sort with an example."
+4. Ask an advanced question about function pointers.
+5. Change difficulty levels and verify that explanations adapt.
+6. Verify follow-up questions work.
+
+## Code tools
+1. Generate a C program.
+2. Copy generated code.
+3. Explain a supplied program.
+4. Debug code containing a missing semicolon.
+5. Test an example of a logical error.
+6. If code execution is configured, run a program and test compiler-error handling.
+
+## Quizzes
+1. Generate a loops quiz.
+2. Answer questions.
+3. Verify scoring.
+4. Verify answer explanations.
+5. Refresh the page and verify saved quiz history.
+
+## Authentication and persistence
+1. Register a student.
+2. Log in and log out.
+3. Save a program.
+4. Refresh the application.
+5. Verify the program remains saved.
+6. Complete a topic.
+7. Create a study target.
+8. Refresh and verify that progress and targets persist.
+9. Log out and log back in.
+10. Verify the data remains available.
+11. Test access isolation between two accounts if the environment permits.
+
+## Interface
+1. Test every navigation item.
+2. Test desktop and mobile layouts.
+3. Test forms with missing fields.
+4. Test error states.
+5. Verify loading indicators.
+6. Verify that buttons perform their advertised actions.
+
+Fix errors discovered during testing.
+
+Report the actual test results honestly. Clearly identify any untested features and any configuration steps that remain.
+
+---
+
+# 27. FINAL ACCEPTANCE CRITERIA
+
+The project is not complete merely because its pages look attractive.
+
+The completed application should have:
+
+- A polished, responsive interface.
+- A working AI tutor with four difficulty levels.
+- Functional learning modes.
+- Working code generation, explanation, and debugging.
+- An exam-preparation section.
+- Functional quizzes and accurate scoring.
+- Real student authentication.
+- Persistent learning progress.
+- Persistent saved items.
+- A functioning study calendar.
+- A usable learning roadmap.
+- Helpful error and loading states.
+- Proper data isolation.
+- Honest handling of unavailable integrations.
+
+Advanced features such as secure code execution, screenshot analysis, flashcards, and gamification should be implemented where supported and tested appropriately.
+
+If any integration requires configuration that cannot be completed automatically, provide clear setup instructions instead of pretending it works.
+
+# FINAL INSTRUCTION
+
+Start building **C Tutor AI** now.
+
+First, select a compatible architecture and inspect the available tools and integrations. Then implement the application in stages, create the complete user interface, connect the real AI functionality, implement persistence and authentication, and test the major user journeys.
+
+Do not stop after creating a design, generating a plan, or displaying static mock data.
+
+Make the application as complete and polished as the available environment allows. Preserve a clean, maintainable codebase and prioritize real functionality over unnecessary visual effects.
+
+At the end, provide a concise implementation report containing:
+1. Features completed.
+2. Features actually tested.
+3. External configuration still required.
+4. Features that remain incomplete.
+5. Exact next steps for finishing the application.

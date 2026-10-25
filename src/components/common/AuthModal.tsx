@@ -1,43 +1,67 @@
 import React, { useState } from 'react';
 import { useStudent } from '../../context/StudentContext';
-import { X, User, Mail, GraduationCap, Calendar, CheckCircle } from 'lucide-react';
+import { useAuth } from '../../context/AuthContext';
+import {
+  X,
+  User,
+  Mail,
+  GraduationCap,
+  Calendar,
+  CheckCircle,
+  LogOut,
+  ShieldCheck,
+  Sparkles,
+  Lock,
+} from 'lucide-react';
 
 interface AuthModalProps {
   isOpen: boolean;
   onClose: () => void;
+  onOpenAuthScreen?: () => void;
 }
 
-export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose }) => {
-  const { state, updateProfile, switchUser } = useStudent();
-  const [isRegistering, setIsRegistering] = useState(false);
+export const AuthModal: React.FC<AuthModalProps> = ({
+  isOpen,
+  onClose,
+  onOpenAuthScreen,
+}) => {
+  const { state, updateProfile } = useStudent();
+  const { currentUser, isGuest, logOut } = useAuth();
+
   const [name, setName] = useState(state.profile.name);
-  const [email, setEmail] = useState(state.profile.email);
   const [college, setCollege] = useState(state.profile.college);
   const [branch, setBranch] = useState(state.profile.branch);
   const [semester, setSemester] = useState(state.profile.semester);
   const [examDate, setExamDate] = useState(state.profile.examDate || '');
   const [successMsg, setSuccessMsg] = useState('');
+  const [isLoggingOut, setIsLoggingOut] = useState(false);
 
   if (!isOpen) return null;
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (isRegistering) {
-      switchUser(email, name);
-      updateProfile({ college, branch, semester, examDate });
-      setSuccessMsg('Account registered and profile activated!');
-    } else {
-      updateProfile({ name, email, college, branch, semester, examDate });
-      setSuccessMsg('Profile updated and saved!');
-    }
+    updateProfile({ name, college, branch, semester, examDate });
+    setSuccessMsg('Academic profile updated and synchronized!');
     setTimeout(() => {
       setSuccessMsg('');
       onClose();
     }, 1200);
   };
 
+  const handleLogoutClick = async () => {
+    setIsLoggingOut(true);
+    try {
+      await logOut();
+      onClose();
+    } catch (err) {
+      console.error('Logout error:', err);
+    } finally {
+      setIsLoggingOut(false);
+    }
+  };
+
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm animate-in fade-in duration-200">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/75 backdrop-blur-sm animate-in fade-in duration-200">
       <div className="relative w-full max-w-md rounded-2xl border border-slate-700/80 bg-[#0d1424] p-6 shadow-2xl text-slate-100">
         <button
           onClick={onClose}
@@ -47,23 +71,48 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose }) => {
           <X className="w-5 h-5" />
         </button>
 
-        <div className="mb-6">
-          <div className="flex items-center gap-3 mb-2">
+        {/* Header */}
+        <div className="mb-5">
+          <div className="flex items-center gap-3 mb-1.5">
             <div className="w-10 h-10 rounded-xl bg-purple-600/20 border border-purple-500/30 flex items-center justify-center text-purple-400">
               <GraduationCap className="w-5 h-5" />
             </div>
             <div>
               <h2 className="text-xl font-bold font-display text-white">
-                {isRegistering ? 'Student Registration' : 'Student Account & Profile'}
+                Student Account & Profile
               </h2>
-              <p className="text-xs text-slate-400">
-                {isRegistering
-                  ? 'Create your persistent B.Tech learning profile'
-                  : 'Manage college details, exam target, and account'}
-              </p>
+              <div className="flex items-center gap-1.5 text-xs text-slate-400">
+                {currentUser ? (
+                  <span className="flex items-center gap-1 text-emerald-400 font-medium">
+                    <ShieldCheck className="w-3.5 h-3.5" /> Authenticated Cloud Account
+                  </span>
+                ) : (
+                  <span className="text-amber-400 font-medium">Guest Mode (Local session only)</span>
+                )}
+              </div>
             </div>
           </div>
         </div>
+
+        {/* Guest Banner Prompt */}
+        {!currentUser && isGuest && (
+          <div className="mb-4 p-3 rounded-xl bg-amber-950/40 border border-amber-800/50 text-amber-300 text-xs flex items-center justify-between">
+            <div>
+              <div className="font-semibold">Exploring as Guest</div>
+              <div className="text-[11px] text-amber-200/80">Sign in to save progress to Cloud Firestore.</div>
+            </div>
+            <button
+              type="button"
+              onClick={() => {
+                onClose();
+                onOpenAuthScreen?.();
+              }}
+              className="px-2.5 py-1 rounded-lg bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs"
+            >
+              Sign In
+            </button>
+          </div>
+        )}
 
         {successMsg && (
           <div className="mb-4 flex items-center gap-2 p-3 rounded-lg bg-emerald-950/60 border border-emerald-700/50 text-emerald-300 text-xs font-medium">
@@ -89,18 +138,28 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose }) => {
           </div>
 
           <div>
-            <label className="block text-xs font-medium text-slate-300 mb-1">Email / Student ID</label>
+            <label className="block text-xs font-medium text-slate-300 mb-1">
+              Account Email {currentUser && '(Registered)'}
+            </label>
             <div className="relative">
               <Mail className="w-4 h-4 text-slate-500 absolute left-3 top-2.5" />
               <input
                 type="email"
-                required
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                placeholder="student@college.edu"
-                className="w-full rounded-lg bg-[#080d17] border border-slate-700/70 pl-9 pr-3 py-2 text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:border-purple-500"
+                disabled={Boolean(currentUser)}
+                value={currentUser?.email || state.profile.email}
+                className="w-full rounded-lg bg-[#080d17] border border-slate-700/70 pl-9 pr-3 py-2 text-sm text-slate-300 disabled:opacity-75 focus:outline-none"
               />
             </div>
+          </div>
+
+          <div>
+            <label className="block text-xs font-medium text-slate-300 mb-1">College / Campus</label>
+            <input
+              type="text"
+              value={college}
+              onChange={(e) => setCollege(e.target.value)}
+              className="w-full rounded-lg bg-[#080d17] border border-slate-700/70 px-3 py-2 text-sm text-slate-100 focus:outline-none focus:border-purple-500"
+            />
           </div>
 
           <div className="grid grid-cols-2 gap-3">
@@ -137,7 +196,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose }) => {
           </div>
 
           <div>
-            <label className="block text-xs font-medium text-slate-300 mb-1">Target Exam Date</label>
+            <label className="block text-xs font-medium text-slate-300 mb-1">Upcoming Exam Date</label>
             <div className="relative">
               <Calendar className="w-4 h-4 text-slate-500 absolute left-3 top-2.5" />
               <input
@@ -149,25 +208,25 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose }) => {
             </div>
           </div>
 
-          <div className="pt-2">
+          <div className="pt-2 flex items-center gap-3">
             <button
               type="submit"
-              className="w-full py-2.5 rounded-lg bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white font-medium text-sm shadow-lg shadow-purple-900/30 transition"
+              className="flex-1 py-2.5 rounded-lg bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white font-medium text-sm shadow-lg shadow-purple-900/30 transition"
             >
-              {isRegistering ? 'Create Student Account' : 'Save Changes'}
+              Save Profile Changes
+            </button>
+
+            <button
+              type="button"
+              onClick={handleLogoutClick}
+              disabled={isLoggingOut}
+              className="px-4 py-2.5 rounded-lg border border-rose-800/60 bg-rose-950/30 hover:bg-rose-900/40 text-rose-300 font-medium text-sm flex items-center gap-1.5 transition disabled:opacity-60"
+            >
+              <LogOut className="w-4 h-4" />
+              <span>{currentUser ? 'Logout' : 'Exit Guest'}</span>
             </button>
           </div>
         </form>
-
-        <div className="mt-4 pt-3 border-t border-slate-800 text-center">
-          <button
-            type="button"
-            onClick={() => setIsRegistering(!isRegistering)}
-            className="text-xs text-purple-400 hover:text-purple-300 underline"
-          >
-            {isRegistering ? 'Already have an account? Manage profile' : 'Need a new student profile? Register here'}
-          </button>
-        </div>
       </div>
     </div>
   );

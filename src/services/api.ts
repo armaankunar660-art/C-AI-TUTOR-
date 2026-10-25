@@ -1,9 +1,28 @@
 import { CompilerResult, DifficultyLevel, LearningMode, QuizQuestion, StudentState } from '../types';
 
+/**
+ * Returns the base API URL.
+ * When running inside a native Android Capacitor app, defaults to the hosted production Cloud Run backend
+ * or VITE_API_BASE_URL. In a standard web browser, uses relative URLs.
+ */
+export function getApiBaseUrl(): string {
+  if (typeof window !== 'undefined') {
+    const isCapacitorNative = Boolean((window as any).Capacitor?.isNativePlatform?.());
+    if (isCapacitorNative) {
+      return (
+        (import.meta as any).env?.VITE_API_BASE_URL ||
+        'https://ais-pre-4d7qgpqleioljbwiyf2ilw-587647140681.asia-southeast1.run.app'
+      );
+    }
+  }
+  return (import.meta as any).env?.VITE_API_BASE_URL || '';
+}
+
 export const api = {
   // Compiler
   async runCode(code: string, stdin: string = ''): Promise<CompilerResult> {
-    const res = await fetch('/api/compiler/run', {
+    const baseUrl = getApiBaseUrl();
+    const res = await fetch(`${baseUrl}/api/compiler/run`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ code, stdin }),
@@ -16,7 +35,8 @@ export const api = {
   },
 
   async getCompilerStatus(): Promise<{ available: boolean; version: string | null; compiler: string }> {
-    const res = await fetch('/api/compiler/status');
+    const baseUrl = getApiBaseUrl();
+    const res = await fetch(`${baseUrl}/api/compiler/status`);
     return res.json();
   },
 
@@ -27,7 +47,8 @@ export const api = {
     mode: LearningMode;
     history?: Array<{ role: string; text: string }>;
   }): Promise<{ reply: string }> {
-    const res = await fetch('/api/ai/tutor', {
+    const baseUrl = getApiBaseUrl();
+    const res = await fetch(`${baseUrl}/api/ai/tutor`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(params),
@@ -47,7 +68,8 @@ export const api = {
     expectedInput?: string;
     expectedOutput?: string;
   }): Promise<{ text: string }> {
-    const res = await fetch('/api/ai/generate', {
+    const baseUrl = getApiBaseUrl();
+    const res = await fetch(`${baseUrl}/api/ai/generate`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(params),
@@ -64,7 +86,8 @@ export const api = {
     code: string;
     isBeginnerFriendly?: boolean;
   }): Promise<{ explanation: string }> {
-    const res = await fetch('/api/ai/explain', {
+    const baseUrl = getApiBaseUrl();
+    const res = await fetch(`${baseUrl}/api/ai/explain`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(params),
@@ -83,7 +106,8 @@ export const api = {
     expectedBehavior?: string;
     difficulty?: DifficultyLevel;
   }): Promise<{ analysis: string }> {
-    const res = await fetch('/api/ai/debug', {
+    const baseUrl = getApiBaseUrl();
+    const res = await fetch(`${baseUrl}/api/ai/debug`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(params),
@@ -101,7 +125,8 @@ export const api = {
     question?: string;
     markFormat: '2-mark' | '5-mark' | '10-mark' | 'quick-revision';
   }): Promise<{ answer: string }> {
-    const res = await fetch('/api/ai/exam', {
+    const baseUrl = getApiBaseUrl();
+    const res = await fetch(`${baseUrl}/api/ai/exam`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(params),
@@ -120,7 +145,8 @@ export const api = {
     count: number;
     questionType: string;
   }): Promise<{ topic: string; difficulty: string; questions: QuizQuestion[] }> {
-    const res = await fetch('/api/ai/quiz', {
+    const baseUrl = getApiBaseUrl();
+    const res = await fetch(`${baseUrl}/api/ai/quiz`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(params),
@@ -139,7 +165,8 @@ export const api = {
     weakTopics: string[];
     targetGrade: string;
   }): Promise<any> {
-    const res = await fetch('/api/ai/study-plan', {
+    const baseUrl = getApiBaseUrl();
+    const res = await fetch(`${baseUrl}/api/ai/study-plan`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(params),
@@ -158,7 +185,8 @@ export const api = {
     action: 'explain' | 'solve' | 'debug' | 'notes' | 'mcq';
     customPrompt?: string;
   }): Promise<{ result: string }> {
-    const res = await fetch('/api/ai/screenshot', {
+    const baseUrl = getApiBaseUrl();
+    const res = await fetch(`${baseUrl}/api/ai/screenshot`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(params),
@@ -173,7 +201,8 @@ export const api = {
   // Student Persistence
   async loadStudent(userId: string): Promise<StudentState | null> {
     try {
-      const res = await fetch(`/api/student/load?userId=${encodeURIComponent(userId)}`);
+      const baseUrl = getApiBaseUrl();
+      const res = await fetch(`${baseUrl}/api/student/load?userId=${encodeURIComponent(userId)}`);
       const data = await res.json();
       return data.data;
     } catch (e) {
@@ -184,7 +213,8 @@ export const api = {
 
   async saveStudent(userId: string, data: Partial<StudentState>): Promise<void> {
     try {
-      await fetch('/api/student/save', {
+      const baseUrl = getApiBaseUrl();
+      await fetch(`${baseUrl}/api/student/save`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ userId, data }),
@@ -195,7 +225,8 @@ export const api = {
   },
 
   async resetStudent(userId: string): Promise<void> {
-    await fetch('/api/student/reset', {
+    const baseUrl = getApiBaseUrl();
+    await fetch(`${baseUrl}/api/student/reset`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ userId }),
