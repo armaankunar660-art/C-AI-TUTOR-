@@ -1,0 +1,93 @@
+{
+  "student_1": {
+    "profile": {
+      "id": "student_1",
+      "name": "Armaan Kunar",
+      "email": "armaankunar660@gmail.com",
+      "college": "B.Tech Computer Science & Engineering",
+      "branch": "CSE (Semester 1 / 2)",
+      "semester": "Semester 1",
+      "examDate": "2026-11-08",
+      "avatarSeed": "c_master"
+    },
+    "xp": 40,
+    "level": 1,
+    "streakDays": 1,
+    "lastActiveDate": "2026-10-25",
+    "completedTopics": [],
+    "savedPrograms": [],
+    "savedExplanations": [],
+    "quizHistory": [],
+    "mistakeNotes": [],
+    "studyTargets": [
+      {
+        "id": "target_1",
+        "title": "Revise Loop Control & Nested Patterns",
+        "description": "Practice for, while, and do-while loops with star patterns.",
+        "topic": "Control Flow",
+        "dueDate": "2026-10-27",
+        "priority": "High",
+        "status": "Pending"
+      },
+      {
+        "id": "target_2",
+        "title": "Master Pointer Arithmetic and Dynamic Arrays",
+        "description": "Solve 3 malloc/free exercises and pointer offset logic.",
+        "topic": "Pointers and Memory",
+        "dueDate": "2026-10-30",
+        "priority": "Medium",
+        "status": "Pending"
+      }
+    ],
+    "flashcards": [
+      {
+        "id": "fc_1",
+        "topic": "Pointers",
+        "frontQuestion": "What does the unary operator `*` do when applied to a pointer variable in C?",
+        "backAnswer": "Dereferencing operator: accesses the value stored at the memory address pointed to by the pointer (e.g., `*ptr = 20;`).",
+        "difficulty": "beginner",
+        "known": false,
+        "reviewCount": 0
+      },
+      {
+        "id": "fc_2",
+        "topic": "Functions",
+        "frontQuestion": "Does C support pass-by-reference natively?",
+        "backAnswer": "No. Standard C strictly passes ALL arguments by value. To simulate reference semantics, C passes pointer values (memory addresses) by value.",
+        "difficulty": "intermediate",
+        "known": false,
+        "reviewCount": 0
+      },
+      {
+        "id": "fc_3",
+        "topic": "Memory",
+        "frontQuestion": "What is the difference between malloc() and calloc() in stdlib.h?",
+        "backAnswer": "malloc(size) allocates uninitialized memory (contains garbage values); calloc(num, size) allocates memory and initializes all bytes to zero.",
+        "difficulty": "intermediate",
+        "known": false,
+        "reviewCount": 0
+      },
+      {
+        "id": "fc_4",
+        "topic": "Structures",
+        "frontQuestion": "What is the arrow operator (->) used for in C?",
+        "backAnswer": "Member access through a pointer to a struct or union. `ptr->member` is shorthand for `(*ptr).member`.",
+        "difficulty": "beginner",
+        "known": false,
+        "reviewCount": 0
+      },
+      {
+        "id": "fc_5",
+        "topic": "Arrays",
+        "frontQuestion": "Why does an array name decay into a pointer in most expressions?",
+        "backAnswer": "In C, an array identifier automatically evaluates to a pointer to its first element (&arr[0]), except with sizeof, &arr, or string literals.",
+        "difficulty": "advanced",
+        "known": false,
+        "reviewCount": 0
+      }
+    ],
+    "completedChallenges": [],
+    "achievements": [],
+    "updatedAt": "2026-10-25T06:28:54.896Z"
+  }
+}
