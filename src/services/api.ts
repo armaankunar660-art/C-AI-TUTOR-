@@ -11,7 +11,7 @@ export function getApiBaseUrl(): string {
     if (isCapacitorNative) {
       return (
         (import.meta as any).env?.VITE_API_BASE_URL ||
-        'https://ais-pre-4d7qgpqleioljbwiyf2ilw-587647140681.asia-southeast1.run.app'
+        'https://c-ai-tutor.onrender.com'
       );
     }
   }
